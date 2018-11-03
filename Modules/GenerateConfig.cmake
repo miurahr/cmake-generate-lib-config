@@ -3,7 +3,7 @@
 include(SelectImportedConfig)
 include(SplitLibraryToCFlag)
 
-function(generate_config _target _template)
+function(generate_config _target _output)
     # CONFIG_PREFIX, CONFIG_CFLAGS, CONFIG_DATADIR, CONFIG_LIBS
     if(NOT DEFINED CMAKE_INSTALL_PREFIX)
         set(CONFIG_PREFIX "/usr/local") # default
@@ -13,6 +13,7 @@ function(generate_config _target _template)
     set(CONFIG_CFLAGS "-I${CONFIG_PREFIX}/include")
     set(CONFIG_DATADIR "${CONFIG_PREFIX}/share/${_target}/${${_target}_VERSION_MAJOR}.${${_target}_VERSION_MINOR}")
     set(CONFIG_LIBS "-L${CONFIG_PREFIX}/${CMAKE_INSTALL_LIBDIR} -l${_target}")
+        set(CONFIG_VERSION ${${_target}_VERSION})
 
     # CONFIG_DEP_LIBS
     set(_DEP_LIBS "")
@@ -54,4 +55,11 @@ function(generate_config _target _template)
     endforeach()
     string(REPLACE ";" " " CONFIG_DEP_LIBS "${_DEP_LIBS}")
 
+    # Generate lib-config
+    file(READ ${CMAKE_CURRENT_LIST_DIR}/lib-config.in LIB_CONFIG_CONTENT)
+    string(CONFIGURE "${LIB_CONFIG_CONTENT}" LIB_CONFIG_CONTENT @ONLY)
+    file(GENERATE OUTPUT ${_output} CONTENT "${LIB_CONFIG_CONTENT}")
+    install(PROGRAMS ${_output}
+            DESTINATION bin
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 endfunction()
