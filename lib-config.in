@@ -13,7 +13,7 @@ usage()
 	cat <<EOF
 Usage: $CONFIG_COMMAND [OPTIONS]
 Options:
-	[--prefix[=DIR]]
+	[--prefix]
 	[--libs]
 	[--dep-libs]
 	[--cflags]
