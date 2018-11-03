@@ -1,0 +1,23 @@
+
+function(split_library_to_cflags _lib _result)
+    if(_lib)
+        set(RESULT)
+        get_filename_component(_lib_name ${_lib} NAME_WE)
+        if(_lib_name STREQUAL "")
+        else()
+            string(REGEX REPLACE "^lib" "" _lib_name ${_lib_name})
+            get_filename_component(_lib_dir ${_lib} PATH)
+            if("${_lib_dir}" STREQUAL "")
+                set(RESULT "-l${_lib_name}")
+            elseif("${_lib_dir}" STREQUAL "/usr/lib")
+                set(RESULT "-l${_lib_name}")
+            else()
+                set(RESULT "-L${_lib_dir}")
+                list(APPEND RESULT "-l${_lib_name}")
+            endif()
+        endif()
+        set(${_result} "${RESULT}" PARENT_SCOPE)
+    endif()
+endfunction()
+
+
