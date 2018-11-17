@@ -1,3 +1,17 @@
+# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
+# file Copyright.txt.
+
+#[=======================================================================[.rst:
+SplitLibraryToCflags
+--------------------
+
+  Convert full path of library into -L/usr/local -lz style cflags.
+
+.. command:: split_library_to_cflags
+
+  split_library_to_cflags(<library path> <output variable>)
+
+#]=======================================================================]
 
 function(split_library_to_cflags _lib _result)
     if(_lib)
